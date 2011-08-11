@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+
+from optparse import OptionParser
+
+
+version = "0.1"
+usage = "[options] target1 [target2 .. targetN]"
+
+def build_arg_parser():
+    parser = OptionParser(usage=usage, version=version)
+    parser.add_option("-l", "--list", dest="list_projects", action="store_true",
+                      help="list known projects")
+    parser.add_option("-s", "--source", dest="source", 
+                      help="directory to look for files to copy")
+    parser.add_option("--config", dest="config", default="~/.leaprc",
+                      help="specify config file (default=~/.leaprc)")
+    return parser
+
+
+(options, args) = build_arg_parser().parse_args()
+
+from leap_config import LeapConfig
+
+config = LeapConfig(options.config)
+
+if options.list_projects:
+    for proj in config.get_projects():
+        print proj
+
+
