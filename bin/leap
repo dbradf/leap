@@ -4,7 +4,7 @@ from optparse import OptionParser
 
 
 version = "0.1"
-usage = "[options] target1 [target2 .. targetN]"
+usage = "[options] project target1 [target2 .. targetN]"
 
 def build_arg_parser():
     parser = OptionParser(usage=usage, version=version)
@@ -16,8 +16,9 @@ def build_arg_parser():
                       help="specify config file (default=~/.leaprc)")
     return parser
 
+arg_parser = build_arg_parser()
 
-(options, args) = build_arg_parser().parse_args()
+(options, args) = arg_parser.parse_args()
 
 from leap_config import LeapConfig
 
@@ -26,5 +27,28 @@ config = LeapConfig(options.config)
 if options.list_projects:
     for proj in config.get_projects():
         print proj
+
+    exit(0)
+
+if len(args) < 2:
+    arg_parser.error("Missing arguments")
+
+project_name = args[0]
+project_directory = config.get_project_directory()
+
+found_project = False
+for proj in config.get_projects():
+    if proj == project_name:
+        found_project = True
+
+if found_project == False:
+    arg_parser.error("Project '%s' not found!" % project_name)
+
+from leap_project import LeapProject
+
+project = LeapProject(project_directory, project_name)
+
+for target in args[1:]:
+    project.migrate(target)
 
 

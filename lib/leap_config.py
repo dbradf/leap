@@ -10,7 +10,7 @@ class LeapConfig:
 
     def parse_config_file(self, config_file):
         for line in open(config_file):
-            str_parts = line.rstrip().split()
+            str_parts = line.rstrip().split('=')
             if len(str_parts) > 1:
                 self.set_attribute(str_parts[0], str_parts[1])
             else:
@@ -24,3 +24,6 @@ class LeapConfig:
 
     def get_projects(self):
         return self.projects
+
+    def get_project_directory(self):
+        return self.attributes['leap_directory']
