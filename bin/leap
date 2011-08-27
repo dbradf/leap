@@ -20,7 +20,7 @@ arg_parser = build_arg_parser()
 
 (options, args) = arg_parser.parse_args()
 
-from leap_config import LeapConfig
+from Leap.config import LeapConfig
 
 config = LeapConfig(options.config)
 
@@ -44,7 +44,7 @@ for proj in config.get_projects():
 if found_project == False:
     arg_parser.error("Project '%s' not found!" % project_name)
 
-from leap_project import LeapProject
+from Leap.project import LeapProject
 
 project = LeapProject(project_directory, project_name)
 
