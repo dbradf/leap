@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # Configuration for leap script
 
+from Leap.project import LeapProject
+
 class LeapConfig:
     def __init__(self, config_file="~/.leaprc"):
         self.attributes = {}
@@ -27,3 +29,14 @@ class LeapConfig:
 
     def get_project_directory(self):
         return self.attributes['leap_directory']
+
+    def get_project(self, project_name):
+        found_project = False
+        for proj in self.get_projects():
+            if proj == project_name:
+                found_project = True
+
+        if found_project:
+            return LeapProject(self.get_project_directory(), project_name)
+        else:
+            return None
