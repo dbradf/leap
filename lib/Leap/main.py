@@ -1,4 +1,7 @@
 
+
+import optparse
+
 from Leap.config  import LeapConfig
 from Leap.project import LeapProject
 
@@ -8,7 +11,7 @@ usage   = "[options] project target1 [target2 .. targetN]"
 
 
 def build_arg_parser():
-    parser = OptionParser(usage=usage, version=version)
+    parser = optparse.OptionParser(usage=usage, version=version)
     parser.add_option("-l", "--list", dest="list_projects", action="store_true",
                       help="list known projects")
     parser.add_option("-s", "--source", dest="source", 
