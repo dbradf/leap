@@ -14,6 +14,8 @@ usage   = "[options] project target1 [target2 .. targetN]"
 
 def build_arg_parser():
     parser = optparse.OptionParser(usage=usage, version=version)
+    parser.add_option("-a", "--add", dest="add_project", action="store_true",
+                      help="add new project")
     parser.add_option("-l", "--list", dest="list_projects", action="store_true",
                       help="list known projects")
     parser.add_option("-s", "--source", dest="source", 
@@ -43,6 +45,9 @@ def main():
 
     project = config.get_project(args[0])
 
-    for target in args[1:]:
-        project.migrate(target)
+    if options.add_project:
+        config.add_new_project(args[0], args[1])
+    else:
+        for target in args[1:]:
+            project.migrate(target)
 

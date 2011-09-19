@@ -3,6 +3,7 @@
 
 import Leap.defaults
 import os
+import shutil
 
 from Leap.project import LeapProject
 
@@ -10,6 +11,7 @@ class LeapConfig:
     def __init__(self, config_file=Leap.defaults.config_file):
         self.attributes = {}
         self.projects   = []
+        self.config_filename = config_file
         self.parse_config_file(config_file)
 
 
@@ -47,6 +49,19 @@ class LeapConfig:
             return LeapProject(self.get_project_directory(), project_name)
         else:
             return None
+
+    def add_new_project(self, project_name, project_file):
+        if not os.path.exists(project_file):
+            print "Error: Could not find project file: %s" % project_file
+            return 1
+        shutil.copyfile(project_file, "%s%s%s" % (
+            self.get_project_directory(), os.sep, project_name))
+        config_file = open(self.config_filename, "a")
+        config_file.write("%s\n" % project_name)
+        config_file.close()
+        print "Project: '%s' Added" % project_name
+        return 0
+
 
 
 def create_config_file():
