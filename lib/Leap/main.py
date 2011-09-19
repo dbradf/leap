@@ -2,6 +2,8 @@
 
 import optparse
 
+import Leap.defaults
+
 from Leap.config  import LeapConfig
 from Leap.project import LeapProject
 
@@ -16,8 +18,8 @@ def build_arg_parser():
                       help="list known projects")
     parser.add_option("-s", "--source", dest="source", 
                       help="directory to look for files to copy")
-    parser.add_option("--config", dest="config", default="~/.leaprc",
-                      help="specify config file (default=~/.leaprc)")
+    parser.add_option("--config", dest="config", default=Leap.defaults.config_file,
+                      help="specify config file (default=%s)" % (Leap.defaults.config_file))
     return parser
 
 

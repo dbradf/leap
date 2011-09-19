@@ -1,16 +1,23 @@
 #!/usr/bin/env python
 # Configuration for leap script
 
+import Leap.defaults
+import os
+
 from Leap.project import LeapProject
 
 class LeapConfig:
-    def __init__(self, config_file="~/.leaprc"):
+    def __init__(self, config_file=Leap.defaults.config_file):
         self.attributes = {}
         self.projects   = []
         self.parse_config_file(config_file)
 
 
     def parse_config_file(self, config_file):
+        if not os.path.exists(config_file):
+            if not create_config_file():
+                return None
+
         for line in open(config_file):
             str_parts = line.rstrip().split('=')
             if len(str_parts) > 1:
@@ -40,3 +47,37 @@ class LeapConfig:
             return LeapProject(self.get_project_directory(), project_name)
         else:
             return None
+
+
+def create_config_file():
+    print "Config file does not exist, create? [Y\\n]"
+    create_file = raw_input('?')
+    if create_file == "Y" or create_file == 'y' or create_file == '':
+        create_new_config()
+        return True
+    return False
+
+def query_option(query, default):
+    print "%s? [%s]" % (query, default)
+    user_input = raw_input("?")
+    if user_input == "":
+        return default
+    return user_input
+
+
+def create_new_config():
+    config_location  = query_option("Config file location", 
+                                    Leap.defaults.config_file)
+    config_directory = query_option("Project directory", 
+                                    Leap.defaults.config_directory)
+    install_config(config_location, config_directory)
+
+
+def install_config(location, directory):
+    config_file = open(location, 'w')
+    config_file.write("leap_directory=%s\n" % (directory))
+    config_file.close()
+
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
